@@ -1,10 +1,8 @@
 const router = require("express").Router();
-const Workout = require("../models/workout.js");
+const Workout = require("../models/workout");
 
-
-
-router.post("/api/workouts", (req, res) => {
-    Workout.create({})
+router.post("/api/workouts", ({body}, res) => {
+    Workout.create(body)
         .then(dbWorkout => {
             res.json(dbWorkout);
             console.log("dbWorkout create" + dbWorkout);
@@ -14,11 +12,12 @@ router.post("/api/workouts", (req, res) => {
         });
 });
 
-router.put("/api/workouts/:id", (req, res) => {
-    Workout.findByIdAndUpdate(req.params.id, { $push: { exercises: req.body } },
+router.put("/api/workouts/:id", ({params, body}, res) => {
+    Workout.findByIdAndUpdate(params.id, 
+        { $push: { exercises: {body} } },
         { new: true, runValidators: true })
         .then(dbWorkout => {
-            // console.log("item update");
+            console.log("item update");
             res.json(dbWorkout);
         })
         .catch(err => {
@@ -29,7 +28,7 @@ router.put("/api/workouts/:id", (req, res) => {
 router.get("/api/workouts", (req, res) => {
     Workout.find()
         .then(dbWorkout => {
-            // console.log("GET all dbWorkout" + dbWorkout);
+            console.log("GET all dbWorkout" + dbWorkout);
             res.json(dbWorkout);
         })
         .catch(err => {
@@ -37,10 +36,10 @@ router.get("/api/workouts", (req, res) => {
         });
 });
 
-router.get("/api/workouts/stats", (req, res) => {
-    Workout.find({})
+router.get("/api/workouts/range", (req, res) => {
+    Workout.find().limit(10)
         .then(dbWorkout => {
-            // console.log("GET stats dbWorkout", +dbWorkout);
+            console.log("GET stats dbWorkout", +dbWorkout);
             res.json(dbWorkout);
         })
         .catch(err => {
@@ -51,7 +50,7 @@ router.get("/api/workouts/stats", (req, res) => {
 router.delete("/api/workouts/:id", ({ body }, res) => {
     Workout.findByIdAndDelete(body.id)
         .then(dbWorkout => {
-            // console.log("item delete");
+            console.log("item delete");
             res.json(dbWorkout);
         })
         .catch(err => {

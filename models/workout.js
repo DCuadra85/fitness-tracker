@@ -7,7 +7,7 @@ const workoutSchema = new Schema({
         type: Date,
         default: () => new Date
     },
-    exercise: [{
+    exercises: [{
         type: {
             type: String,
             trim: true,
@@ -35,7 +35,9 @@ const workoutSchema = new Schema({
             required: "Please enter the duration of the excercise."
         },
     }]
-}, {
+
+}, 
+{
     toJSON: {
         virtuals: true
     }
@@ -47,5 +49,5 @@ workoutSchema.virtual("totalDuration").get(() => {
     }, 0)
 });
 
-const Workout = mongoose.model("Workout", workoutSchema);
-module.exports = Workout;
+const Exercise = mongoose.model("Exercise", workoutSchema);
+module.exports = Exercise;
