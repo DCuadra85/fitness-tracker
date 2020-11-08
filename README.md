@@ -1,57 +1,117 @@
-# Unit 17 Nosql Homework: Workout Tracker
+# Team Page Generator
 
-For this assignment, you'll create a workout tracker. You have already been provided with the front end code in the `Develop` folder. This assignment will require you to create Mongo database with a Mongoose schema and handle routes with Express.
+This program is a general workout tracker that records the activity you have done each day. This is complete with graph comparisons to show the consistency or lack thereof of your workout regimen. The program will take in the values and names you enter and the graphs reflect the information added.
 
-## User Story
+* Use of MongoDB
+* Use of JavaScript.
+* Use of Node.Js.
+* Use of CSS
+* Use of HTML.
 
-* As a user, I want to be able to view create and track daily workouts. I want to be able to log multiple exercises in a workout on a given day. I should also be able to track the name, type, weight, sets, reps, and duration of exercise. If the exercise is a cardio exercise, I should be able to track my distance traveled.
+## Installation
 
-## Business Context
+If you are going to run this locally on your system, and not on Heroku, you will first need to make sure you have Node.JS installed within your Visual Studio Code application. The next step would be to right click the Develop folder and select "Open in Integrated Terminal". When your terminal opens, type the command "npm install". Once the dependencies have installed, type the command "node app.js" to start the program.
 
-A consumer will reach their fitness goals more quickly when they track their workout progress.
+## Usage
 
-## Acceptance Criteria
+This page's function was created through Express, with JavaScript and Node.js. Go to [Heroku](https://quiet-caverns-98815.herokuapp.com/) and the program will automatically start. This will load the Fitnes Tracker home page. Click the "Get Started" button to begin using the note taker. Click Continue Workout or New Workout to being entering values. You will need to select an exercise type and then enter the relevant details in order to begin tracking the information. When this is complete, click on the Dashboard at the top left of the screen to view the charts of your activities.
 
-When the user loads the page, they should be given the option to create a new workout or continue with their last workout.
+<img src="./fitnesstracker.gif">
 
-The user should be able to:
 
-  * Add exercises to a previous workout plan.
+## Code
 
-  * Add new exercises to a new workout plan.
+Key Part of Model to Pass Through Values:
+```
+{
+    toJSON: {
+      virtuals: true
+    }
+  })
 
-  * View the combined weight of multiple exercises on the `stats` page.
+workoutSchema.virtual("totalDuration").get(function () {
+    return this.exercises.reduce((total, exercise) => {
+        return total+exercise.duration
+    }, 0)
+})
+```
 
-To deploy an application with a MongoDB database to Heroku, you'll need to set up a MongoDB Atlas account and connect a database from there to your application. Be sure to use the following guides for support:
+Example of Functional Parts of Routes:
+```
+router.put("/api/workouts/:id", (req, res) => {
+    Workout.findByIdAndUpdate(req.params.id,
+        { $push: { exercises: req.body } },
+        { new: true, runValidators: true })
+        .then(dbWorkout => {
+            console.log("item update");
+            res.json(dbWorkout);
+        })
+        .catch(err => {
+            res.status(400).json(err);
+        });
+});
 
-  * [Set Up MongoDB Atlas](../student-resources/deployment/deploy-guide/MongoAtlas-Setup.md)
+router.get("/api/workouts", (req, res) => {
+    Workout.find()
+        .then(dbWorkout => {
+            console.log("GET all dbWorkout" + dbWorkout);
+            res.json(dbWorkout);
+        })
+        .catch(err => {
+            res.status(400).json(err);
+        });
+});
+```
 
-  * [Deploy with Heroku and MongoDB Atlas](../student-resources/deployment/deploy-guide/MongoAtlas-Deploy.md)
 
-## Commit Early and Often
+## Credits
 
-One of the most important skills to master as a web developer is version control. Building the habit of committing via Git is important for the following two reasons:
+* https://github.com/coding-boot-camp/
+* https://stackoverflow.com/questions/
+* https://guides.github.com/features/mastering-markdown/
+* https://docs.mongodb.com/manual/tutorial/query-documents/
 
-1. Your commit history is a signal to employers that you are actively working on projects and learning new skills.
 
-2. Your commit history allows you to revert your codebase in the event that you need to return to a previous state.
+## Built With
 
-Follow these guidelines for committing:
+* [HTML](https://developer.mozilla.org/en-US/docs/Web/HTML)
+* [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+* [MongoDB](https://www.mongodb.com/)
 
-* Make single-purpose commits for related changes to ensure a clean, manageable history. If you are fixing two issues, make two commits.
+## Deployed Link
 
-* Write descriptive, meaningful commit messages so that you and anyone else looking at your repository can easily understand its history.
+* https://quiet-caverns-98815.herokuapp.com/
 
-* Don't commit half-done work, for the sake of your collaborators (and your future self!).
+## Authors
 
-* Test your application before you commit to ensure functionality at every step in the development process.
+* **Daniel Cuadra** 
 
-We want you to have well over 200 commits by graduation, so commit early and often!
+- [GitHub](https://github.com/DCuadra85)
+- [LinkedIn](https://www.linkedin.com/in/daniel-cuadra-3705aa39/)
 
-## Submission on BCS
+## Contributor
+* **Ryan Nemec**
 
-You are required to submit the following:
+## License
 
-* The URL to the deployed application
+MIT License
 
-* The URL to the GitHub repository
+Copyright (c) [2020] [DanielCuadra]
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
