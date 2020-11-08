@@ -1,4 +1,4 @@
-# Team Page Generator
+# Fitness Tracker
 
 This program is a general workout tracker that records the activity you have done each day. This is complete with graph comparisons to show the consistency or lack thereof of your workout regimen. The program will take in the values and names you enter and the graphs reflect the information added.
 
